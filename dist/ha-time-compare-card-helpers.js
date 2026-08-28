@@ -1,5 +1,5 @@
 // Filename: dist/ha-time-compare-card-helpers.js
-// Timestamp: 2026-08-28 11:40 Europe/Vienna
+// Timestamp: 2026-08-28 12:03 Europe/Vienna
 
 export function parseTime(value) {
   const match = /^(\d{2}):(\d{2})$/.exec(value || "");
@@ -62,7 +62,18 @@ export async function loadHistory(hass, entity, start, end) {
       const stamp = row?.last_changed ?? row?.last_updated ?? row?.lc ?? row?.lu;
       const date = stamp ? new Date(stamp) : null;
       if (!Number.isFinite(value) || !date || Number.isNaN(date.getTime())) return null;
-      return { value, date };
+
+      // Home Assistant can return the state that was already active at the
+      // beginning of the requested period. Its actual last_changed timestamp
+      // may be older than the requested start. Clamp that point to the period
+      // boundary so the chart and time-weighted average start at x=0.
+      const normalizedDate = date < start
+        ? new Date(start)
+        : date > end
+          ? new Date(end)
+          : date;
+
+      return { value, date: normalizedDate };
     })
     .filter(Boolean);
 }
