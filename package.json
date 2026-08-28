@@ -1,0 +1,9 @@
+{
+  "name": "ha-time-compare-card",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check dist/ha-time-compare-card.js && node --check dist/ha-time-compare-card-core.js && node --check dist/ha-time-compare-card-editor.js && node --check dist/ha-time-compare-card-helpers.js && node --check dist/ha-time-compare-card-strings.js && node --check dist/ha-time-compare-card-styles.js"
+  }
+}

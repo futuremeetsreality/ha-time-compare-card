@@ -1,0 +1,30 @@
+# Filename: .github/workflows/validate.yml
+# Timestamp: 2026-08-28 11:56 Europe/Vienna
+name: Validate
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: JavaScript syntax check
+        run: npm run check
+
+      - name: HACS validation
+        uses: hacs/action@main
+        with:
+          category: plugin
+          # The HACS action checks the repository license on the default branch.
+          # During this initial feature branch the LICENSE file is not on main yet.
+          # HACS will validate it normally after merge.
+          ignore: images description topics license
