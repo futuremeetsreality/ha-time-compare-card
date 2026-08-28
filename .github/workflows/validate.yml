@@ -1,5 +1,5 @@
 # Filename: .github/workflows/validate.yml
-# Timestamp: 2026-08-28 11:34 Europe/Vienna
+# Timestamp: 2026-08-28 11:56 Europe/Vienna
 name: Validate
 
 on:
@@ -7,12 +7,19 @@ on:
   pull_request:
   workflow_dispatch:
 
-permissions: {}
+permissions:
+  contents: read
 
 jobs:
-  validate-hacs:
+  validate:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: JavaScript syntax check
+        run: npm run check
+
       - name: HACS validation
         uses: hacs/action@main
         with:
